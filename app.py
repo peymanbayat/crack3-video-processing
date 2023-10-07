@@ -3,6 +3,8 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import load_model
 import streamlit as st
+import cv2
+import av
 import numpy as np
 import pandas as pd 
 import webbrowser
@@ -141,7 +143,7 @@ if app_mode == 'Run on Video':
     #Input for Video
     video_file = st.sidebar.file_uploader("Upload a Video",type=['mp4','mov','avi','asf','m4v'])
     st.sidebar.markdown("---")
-    #tffile = tempfile.NamedTemporaryFile(delete=False)
+    tffile = tempfile.NamedTemporaryFile(delete=False)
     
     if not video_file:
         vid = cv2.VideoCapture(demo_video)
