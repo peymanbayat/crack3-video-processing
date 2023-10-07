@@ -100,9 +100,8 @@ if app_mode == 'About App':
 
 
 if app_mode == 'Run on Image':
-
  
-def upload_and_predict(image_data,weight):
+ def upload_and_predict(image_data,weight):
    global prediction
    size = (224,224)
    image = ImageOps.fit(image_data,size,Image.ANTIALIAS)
@@ -111,9 +110,9 @@ def upload_and_predict(image_data,weight):
    prediction = weight.predict(img_reshape)
    return prediction
 
-if file is  None:
+ if file is  None:
    st.error("Please upload an image")
-else:   
+ else:   
    try:
      image = Image.open(file)
      rebuild_model = load_model("weights_data/my_model.h5")
