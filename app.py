@@ -93,6 +93,14 @@ State = st.selectbox(
 file = st.file_uploader("Please upload your image here:")
 
 
+app_mode = st.sidebar.selectbox('Choose the App Mode',
+                                ['About App','Run on Image','Run on Video','Run on WebCam'])
+
+if app_mode == 'About App':
+
+
+if app_mode == 'Run on Image':
+
  
 def upload_and_predict(image_data,weight):
    global prediction
@@ -120,3 +128,41 @@ else:
    except ValueError:
       st.warning("Please upload a valid image")
 
+
+if app_mode == 'Run on Video':
+    st.subheader("No. of Required Oxygen Valve(s):")
+    text = st.markdown("")
+    
+    st.sidebar.markdown("---")
+    
+    st.subheader("Output Image ")
+    stframe = st.empty()
+    
+    #Input for Video
+    video_file = st.sidebar.file_uploader("Upload a Video",type=['mp4','mov','avi','asf','m4v'])
+    st.sidebar.markdown("---")
+    tffile = tempfile.NamedTemporaryFile(delete=False)
+    
+    if not video_file:
+        vid = cv2.VideoCapture(demo_video)
+        tffile.name = demo_video
+    else:
+        tffile.write(video_file.read())
+        vid = cv2.VideoCapture(tffile.name)
+    
+    st.sidebar.markdown("**Input Video**")
+    st.sidebar.video(tffile.name)
+    
+    # predict the video
+    while vid.isOpened():
+        ret, frame = vid.read()
+        if not ret:
+            break
+        frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+        model = load_model()
+        results = model(frame)
+        length = len(results.xyxy[0])
+        output = np.squeeze(results.render())
+        text.write(f"<h1 style='text-align: center; color:blue;'>{length}</h1>",unsafe_allow_html = True)
+        stframe.image(output)
+        
